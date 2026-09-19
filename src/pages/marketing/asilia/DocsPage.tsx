@@ -22,8 +22,8 @@ const NAV: NavGroup[] = [
     title: 'Concepts',
     items: [
       { label: 'The autonomous loop', href: '#concepts' },
-      { label: 'Human in the loop', soon: true },
-      { label: 'Compounding memory', soon: true },
+      { label: 'Human in the loop', href: '#concepts' },
+      { label: 'Compounding memory', href: '#concepts' },
     ],
   },
   {
@@ -37,7 +37,7 @@ const NAV: NavGroup[] = [
     title: 'Reference',
     items: [
       { label: 'CLI reference', to: '/asilia/sdk#cli' },
-      { label: 'API reference', href: '#api', soon: true },
+      { label: 'API access', href: '#api' },
       { label: 'Release notes', to: '/asilia/news' },
     ],
   },
@@ -246,8 +246,8 @@ export function AsiliaDocsPage() {
 
               <DocSection id="api" kicker="Reference" title="API reference">
                 <p className="text-white/50">
-                  The full API reference lands with the SDK. In the meantime, request access and we’ll share the
-                  current interface with partner labs.
+                  API access and supported interfaces depend on your pilot. Contact us to review the current
+                  interface, integration requirements, and access arrangements.
                 </p>
                 <div className="flex flex-wrap gap-3 pt-1">
                   <Link
@@ -257,12 +257,12 @@ export function AsiliaDocsPage() {
                     Request access <ArrowRight className="h-4 w-4" />
                   </Link>
                   <a
-                    href="https://asilia.contineon.com"
+                    href="/login"
                     target="_blank"
                     rel="noreferrer"
                     className="inline-flex items-center gap-1.5 rounded-full border border-white/25 px-5 py-2.5 text-[15px] font-medium text-white transition-colors hover:bg-white/10"
                   >
-                    Open the console <ArrowUpRight className="h-4 w-4" />
+                    Partner sign in <ArrowUpRight className="h-4 w-4" />
                   </a>
                 </div>
               </DocSection>

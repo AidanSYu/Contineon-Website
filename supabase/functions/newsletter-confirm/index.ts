@@ -8,14 +8,14 @@
 import { createClient } from 'jsr:@supabase/supabase-js@2';
 
 Deno.serve(async (req) => {
-  const siteUrl = Deno.env.get('SITE_URL') ?? 'https://containuum.io';
+  const siteUrl = Deno.env.get('SITE_URL') ?? 'https://contineon.com';
   const url = new URL(req.url);
   const token = url.searchParams.get('token') ?? '';
 
   const redirect = (params: string) =>
     new Response(null, { status: 302, headers: { Location: `${siteUrl}/?${params}` } });
 
-  if (!token) return redirect('subscribe=invalid');
+  if (!/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(token)) return redirect('subscribe=invalid');
 
   try {
     const supabase = createClient(
@@ -36,8 +36,11 @@ Deno.serve(async (req) => {
       console.error('confirm update failed:', error);
       return redirect('subscribe=error');
     }
-    // No row updated → token already used or invalid. Treat as success-ish.
-    return redirect(data ? 'subscribe=confirmed' : 'subscribe=already');
+    if (data) return redirect('subscribe=confirmed');
+    const { data: existing, error: lookupError } = await supabase.from('subscribers')
+      .select('status').eq('confirm_token', token).maybeSingle();
+    if (lookupError) return redirect('subscribe=error');
+    return redirect(existing?.status === 'confirmed' ? 'subscribe=already' : 'subscribe=invalid');
   } catch (e) {
     console.error('newsletter-confirm error:', e);
     return redirect('subscribe=error');

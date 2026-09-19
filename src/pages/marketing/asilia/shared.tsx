@@ -257,4 +257,4 @@ export function Section({
 }
 
 /* Shared content links used across the Asilia site. */
-export const ASILIA_URL = 'https://asilia.contineon.com';
+export const ASILIA_URL = '/login';

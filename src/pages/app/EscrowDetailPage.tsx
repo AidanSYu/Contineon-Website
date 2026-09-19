@@ -1,3 +1,4 @@
+import { flags } from '@/lib/flags';
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
@@ -74,7 +75,7 @@ export function EscrowDetailPage() {
   const milestones = agreement.milestones;
   // The customer can fund once the admin finalizes the agreement to 'pending'.
   // A 'draft' is still being edited and create-escrow-payment rejects it (409).
-  const canFund = agreement.status === 'pending';
+  const canFund = flags.payments && agreement.status === 'pending';
   const { done, total } = milestoneProgress(milestones);
   const pct = total ? Math.round((done / total) * 100) : 0;
 
@@ -107,6 +108,9 @@ export function EscrowDetailPage() {
           <Badge variant={agreementBadgeVariant(agreement.status)} className="capitalize">
             {agreement.status}
           </Badge>
+          {!flags.payments && agreement.status === 'pending' && (
+            <p className="max-w-sm text-right text-sm text-ink-muted">Online payments are not available. Contact the team about your engagement.</p>
+          )}
           {canFund && (
             <Button
               onClick={handleFund}

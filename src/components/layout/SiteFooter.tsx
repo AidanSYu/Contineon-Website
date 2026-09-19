@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ArrowUpRight } from 'lucide-react';
+import { legal } from '@/config/legal';
 import { Logo } from './Logo';
 import { NewsletterSignup } from '@/components/marketing/NewsletterSignup';
 
@@ -16,7 +17,7 @@ const COLS: { title: string; links: FooterLink[] }[] = [
     ],
   },
   {
-    title: 'Company',
+    title: 'About',
     links: [
       { label: 'Mission', href: '/mission' },
       { label: 'Careers', href: '/contact?topic=careers' },
@@ -49,14 +50,14 @@ export function SiteFooter() {
         <div className="max-w-xs">
           <Logo className="text-[19px]" />
           <p className="mt-4 text-sm leading-relaxed text-ink-muted">
-            The self-driving lab that remembers. Asilia runs autonomous campaigns on
-            the instruments you already have.
+            We’re building Asilia: an autonomous research system for the instruments
+            your lab already has.
           </p>
 
           <div className="mt-6">
             <h4 className="lab-label">Get launch updates</h4>
             <p className="mb-3 mt-2 text-sm text-ink-muted">
-              Partner names and benchmarks at launch. No spam.
+              Occasional updates on Asilia and our research.
             </p>
             <NewsletterSignup source="footer" />
           </div>
@@ -97,8 +98,8 @@ export function SiteFooter() {
 
       <div className="border-t border-line">
         <div className="site-shell flex flex-col items-center justify-between gap-3 py-6 lab-label sm:flex-row">
-          <span>© 2026 Contineon</span>
-          <span>Built for working labs</span>
+          <span>© {new Date().getFullYear()} Contineon</span>
+          <span className="max-w-md text-center sm:text-right">{legal.status}</span>
         </div>
       </div>
     </footer>

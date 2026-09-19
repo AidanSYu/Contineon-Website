@@ -11,6 +11,9 @@ import { adminClient, ensureStripeCustomer, getUser, stripe, SITE_URL } from '..
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders(req) });
   if (req.method !== 'POST') return json({ error: 'Method not allowed' }, 405, req);
+  if (Deno.env.get('PAYMENTS_ENABLED') !== 'true') {
+    return json({ error: 'Online payments are not available. Contact hello@contineon.com about your engagement.' }, 403, req);
+  }
 
   try {
     const user = await getUser(req);

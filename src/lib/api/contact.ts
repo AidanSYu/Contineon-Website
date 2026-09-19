@@ -8,7 +8,7 @@ import { contactSchema, type ContactInput } from '@/lib/validation';
  */
 export async function submitContact(input: ContactInput): Promise<void> {
   if (!isBackendConfigured) {
-    throw new Error('Backend is not configured yet. Add Supabase keys to .env.local.');
+    throw new Error('The contact form is unavailable. Please email hello@contineon.com.');
   }
 
   const payload = contactSchema.parse(input);

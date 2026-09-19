@@ -1,12 +1,14 @@
 import { Outlet } from 'react-router-dom';
 import { GrainOverlay, BlueprintGrid } from '@/components/effects';
 import { AuthAside } from '@/components/auth/AuthAside';
+import { NoIndex } from '@/components/Seo';
 import { Logo } from './Logo';
 
 /** Two-column shell for auth pages: form on the left, cinematic aside on the right. */
 export function AuthLayout() {
   return (
     <div className="relative grid min-h-screen bg-paper text-ink lg:grid-cols-2">
+      <NoIndex title="Secure access, Contineon" />
       <GrainOverlay />
 
       {/* Left, brand + form */}

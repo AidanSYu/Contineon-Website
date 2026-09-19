@@ -1,0 +1,8 @@
+# Cloudflare Pages server-side redirects. Real 301s for URLs the old sitemap
+# and nav advertised, so crawlers transfer equity instead of soft-404ing
+# through the SPA's client-side <Navigate> fallbacks.
+/about /mission 301
+/platform /asilia 301
+/pricing / 301
+/blog /news 301
+/blog/* /news/:splat 301

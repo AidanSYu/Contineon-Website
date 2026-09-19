@@ -115,8 +115,8 @@ export function SignupPage() {
       <p className="mt-4 text-center text-xs text-ink-faint">
         By continuing you agree to our{' '}
         <Link to="/terms" className="hover:text-ink hover:underline">Terms</Link> and{' '}
-        <Link to="/privacy" className="hover:text-ink hover:underline">Privacy Policy</Link>. Payments
-        are processed securely by Stripe.
+        <Link to="/privacy" className="hover:text-ink hover:underline">Privacy Notice</Link>. Pilot access
+        is subject to a separate agreement.
       </p>
     </div>
   );

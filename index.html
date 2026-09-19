@@ -4,23 +4,55 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#06080B" />
-    <meta name="description" content="Contineon is the frontier lab turning intelligence into matter. We are building the second invention factory: industrialized invention across all matter. Asilia is the wedge." />
+    <meta name="description" content="Contineon is the frontier lab turning intelligence into matter. We are building the second invention factory: industrialized invention across all matter. Asilia is the wedge." data-ssg />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="icon" type="image/x-icon" href="/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <title>Contineon, industrializing breakthrough science</title>
+    <title data-ssg>Contineon, industrializing breakthrough science</title>
 
-    <!-- Open Graph / social unfurl (base values; per-page React meta overrides
-         these once the SPA hydrates, but crawlers that don't run JS see these). -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Contineon" />
-    <meta property="og:title" content="Contineon, industrializing breakthrough science" />
-    <meta property="og:description" content="The frontier lab turning intelligence into matter. Building the second invention factory: industrialized invention across all matter." />
-    <meta property="og:image" content="/images/sr71-quote-wide.png" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Contineon, industrializing breakthrough science" />
-    <meta name="twitter:description" content="The frontier lab turning intelligence into matter. Building the second invention factory: industrialized invention across all matter." />
-    <meta name="twitter:image" content="/images/sr71-quote-wide.png" />
+    <!-- Head tags for crawlers that don't run JS (social unfurlers, most LLM
+         bots). scripts/prerender.mjs rewrites everything stamped `data-ssg`
+         per route in the build output; the React <Seo/> removes the stamped
+         tags on mount so its own tags take over after hydration. -->
+    <link rel="canonical" href="https://contineon.com/" data-ssg />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" data-ssg />
+    <meta property="og:type" content="website" data-ssg />
+    <meta property="og:site_name" content="Contineon" data-ssg />
+    <meta property="og:title" content="Contineon, industrializing breakthrough science" data-ssg />
+    <meta property="og:description" content="The frontier lab turning intelligence into matter. Building the second invention factory: industrialized invention across all matter." data-ssg />
+    <meta property="og:url" content="https://contineon.com/" data-ssg />
+    <meta property="og:image" content="https://contineon.com/images/og-card.jpg" data-ssg />
+    <meta property="og:image:width" content="1200" data-ssg />
+    <meta property="og:image:height" content="630" data-ssg />
+    <meta property="og:image:alt" content="Contineon, industrializing breakthrough science" data-ssg />
+    <meta name="twitter:card" content="summary_large_image" data-ssg />
+    <meta name="twitter:title" content="Contineon, industrializing breakthrough science" data-ssg />
+    <meta name="twitter:description" content="The frontier lab turning intelligence into matter. Building the second invention factory: industrialized invention across all matter." data-ssg />
+    <meta name="twitter:image" content="https://contineon.com/images/og-card.jpg" data-ssg />
+    <script type="application/ld+json" data-ssg>
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://contineon.com/#organization",
+            "name": "Contineon",
+            "url": "https://contineon.com/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://contineon.com/brand/contineon-mark-black.png"
+            }
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://contineon.com/#website",
+            "name": "Contineon",
+            "url": "https://contineon.com/",
+            "publisher": { "@id": "https://contineon.com/#organization" }
+          }
+        ]
+      }
+    </script>
     <script>
       // FOUC guard: apply the saved theme before first paint.
       (function () {

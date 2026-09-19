@@ -5,6 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Turnstile } from '@/components/Turnstile';
 import { subscribe } from '@/lib/api/subscribers';
 import { subscribeSchema } from '@/lib/validation';
+import { flags } from '@/lib/flags';
+import { isBackendConfigured } from '@/lib/backendConfig';
+import { legal } from '@/config/legal';
 import { cn } from '@/lib/utils';
 
 const turnstileEnabled = Boolean(import.meta.env.VITE_TURNSTILE_SITE_KEY);
@@ -18,7 +21,8 @@ const turnstileEnabled = Boolean(import.meta.env.VITE_TURNSTILE_SITE_KEY);
 export function NewsletterSignup({ source = 'footer', className }: { source?: string; className?: string }) {
   const [email, setEmail] = useState('');
   const [token, setToken] = useState('');
-  const [done, setDone] = useState(false);
+  const [done, setDone] = useState<'confirmed' | 'pending' | null>(null);
+  const [verificationAttempt, setVerificationAttempt] = useState(0);
   const [isPending, setIsPending] = useState(false);
 
   const onSubmit = async (e: React.FormEvent) => {
@@ -35,23 +39,29 @@ export function NewsletterSignup({ source = 'footer', className }: { source?: st
 
     setIsPending(true);
     try {
-      await subscribe({ email, source, turnstileToken: token });
-      setDone(true);
+      const result = await subscribe({ email, source, turnstileToken: token });
+      setDone(result.alreadyConfirmed ? 'confirmed' : 'pending');
       setEmail('');
       setToken('');
     } catch (err: unknown) {
       toast.error(err instanceof Error ? err.message : 'Could not subscribe. Please try again.');
     } finally {
       setIsPending(false);
+      setToken('');
+      setVerificationAttempt((attempt) => attempt + 1);
     }
   };
 
+  if (!flags.newsletter || !isBackendConfigured) {
+    return <p className={cn('text-sm text-ink-muted', className)}>Follow our <a href="/news" className="text-safety hover:underline">news</a> for updates, or <a href={`mailto:${legal.contactEmail}`} className="text-safety hover:underline">contact the team</a>.</p>;
+  }
+
   if (done) {
     return (
-      <div className={cn('flex items-start gap-2.5 text-sm text-ink-muted', className)}>
+      <div role="status" className={cn('flex items-start gap-2.5 text-sm text-ink-muted', className)}>
         <MailCheck className="mt-0.5 h-4 w-4 flex-none text-safety" strokeWidth={1.75} />
         <span>
-          Almost there, check your inbox and click the link to confirm your subscription.
+          {done === 'confirmed' ? 'You’re already subscribed. Thank you for following along.' : 'Check your inbox and click the link to confirm your subscription.'}
         </span>
       </div>
     );
@@ -78,7 +88,11 @@ export function NewsletterSignup({ source = 'footer', className }: { source?: st
           {isPending ? 'Joining…' : (<>Join <ArrowRight className="h-4 w-4" /></>)}
         </button>
       </div>
-      {turnstileEnabled && <Turnstile onToken={setToken} className="pt-3" />}
+      {turnstileEnabled && <Turnstile key={verificationAttempt} onToken={setToken} className="pt-3" />}
+      <p className="mt-3 text-xs leading-relaxed text-ink-muted">
+        By joining, you request occasional Contineon updates. Confirm by email; unsubscribe by
+        emailing us at any time. <a href="/privacy" className="text-safety hover:underline">Privacy Notice</a>.
+      </p>
     </form>
   );
 }

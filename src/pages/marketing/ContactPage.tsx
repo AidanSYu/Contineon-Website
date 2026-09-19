@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
-import { Mail, MapPin } from 'lucide-react';
+import { Mail } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
@@ -12,6 +12,8 @@ import { Turnstile } from '@/components/Turnstile';
 import { submitContact } from '@/lib/api';
 import { contactSchema, type ContactInput } from '@/lib/validation';
 import { Seo } from '@/components/Seo';
+import { legal } from '@/config/legal';
+import { isBackendConfigured } from '@/lib/backendConfig';
 
 const turnstileEnabled = Boolean(import.meta.env.VITE_TURNSTILE_SITE_KEY);
 
@@ -21,7 +23,7 @@ const TOPICS: Record<string, { eyebrow: string; heading: string; blurb: string; 
     eyebrow: 'DESIGN PARTNER PROGRAM',
     heading: 'Apply for access.',
     blurb:
-      'We onboard a small cohort of design-partner labs, chemistry, materials, and biology teams who run Asilia on their own instruments and shape the product with us. Tell us about your lab and we’ll be in touch within two business days.',
+      'We’re speaking with chemistry, materials, and biology teams interested in shaping Asilia around their instruments and research workflows. Tell us about your lab and we’ll be in touch as soon as we can.',
     starter:
       'Our lab works on … and we run the following instruments / ELN: …\nWe’d like to join the design-partner program because …\nTeam size: …',
   },
@@ -54,17 +56,19 @@ const TOPICS: Record<string, { eyebrow: string; heading: string; blurb: string; 
   general: {
     eyebrow: 'CONTACT',
     heading: 'Let’s talk.',
-    blurb: 'Whether you’re evaluating Asilia for your team or need an enterprise deployment, tell us what you’re building and we’ll get back within two business days.',
+    blurb: 'Whether you’re evaluating Asilia for your team or need an enterprise deployment, tell us what you’re building and we’ll get back as soon as we can.',
     starter: '',
   },
 };
 
 export function ContactPage() {
   const [params] = useSearchParams();
-  const topicKey = params.get('topic') ?? 'general';
+  const requestedTopic = params.get('topic') ?? 'general';
+  const topicKey = Object.hasOwn(TOPICS, requestedTopic) ? requestedTopic : 'general';
   const topic = TOPICS[topicKey] ?? TOPICS.general;
   const [turnstileToken, setTurnstileToken] = useState('');
   const [isPending, setIsPending] = useState(false);
+  const [verificationAttempt, setVerificationAttempt] = useState(0);
 
   const {
     register,
@@ -73,7 +77,7 @@ export function ContactPage() {
     formState: { errors },
   } = useForm<ContactInput>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { name: '', email: '', organization: '', message: topic.starter, company_website: '' },
+    defaultValues: { name: '', email: '', organization: '', message: '', company_website: '' },
   });
 
   const onSubmit = handleSubmit(async (values) => {
@@ -85,13 +89,15 @@ export function ContactPage() {
     setIsPending(true);
     try {
       await submitContact({ ...values, topic: topicKey, turnstileToken });
-      toast.success('Message sent. We’ll respond within two business days.');
+      toast.success('Message received. Thank you for getting in touch.');
       reset();
       setTurnstileToken('');
     } catch (error: unknown) {
       toast.error(error instanceof Error ? error.message : 'Something went wrong.');
     } finally {
       setIsPending(false);
+      setTurnstileToken('');
+      setVerificationAttempt((attempt) => attempt + 1);
     }
   });
 
@@ -114,38 +120,44 @@ export function ContactPage() {
           <div className="mt-10 space-y-px border-t border-line">
             <div className="flex items-center gap-3 border-b border-line py-4 text-ink-muted">
               <Mail className="h-5 w-5 text-safety" strokeWidth={1.5} />
-              <a href="mailto:hello@contineon.io" className="hover:text-ink">
-                hello@contineon.io
+              <a href={`mailto:${legal.contactEmail}`} className="hover:text-ink">
+                {legal.contactEmail}
               </a>
             </div>
-            <div className="flex items-center gap-3 py-4 text-ink-muted">
-              <MapPin className="h-5 w-5 text-safety" strokeWidth={1.5} />
-              <span className="text-sm">Shanghai · San Francisco · Salt Lake City · Boston</span>
-            </div>
+            <p className="pt-4 text-sm text-ink-muted">Based in {legal.baseLocation}.</p>
+            <p className="pb-4 pt-2 text-sm text-ink-muted">{legal.status}</p>
           </div>
         </div>
 
         {/* Right, form */}
         <div className="p-8 sm:p-12">
-          <form onSubmit={onSubmit} className="space-y-5" noValidate>
+          {!isBackendConfigured ? (
+            <div className="space-y-4 text-ink-muted">
+              <h2 className="font-display text-xl font-semibold text-ink">Email the team</h2>
+              <p>For inquiries and access requests, email us with a short description of what you have in mind.</p>
+              <a href={`mailto:${legal.contactEmail}?subject=${encodeURIComponent(topic.eyebrow)}`} className="inline-block text-safety underline underline-offset-4">{legal.contactEmail}</a>
+              <p className="text-sm">Please do not include confidential research or sensitive personal information.</p>
+              <a href="/privacy" className="inline-block text-sm text-safety hover:underline">How we handle your information</a>
+            </div>
+          ) : <form onSubmit={onSubmit} className="space-y-5" noValidate>
             <div>
               <Label htmlFor="name" className="mb-2 block text-ink-muted">Name</Label>
-              <Input id="name" {...register('name')} aria-invalid={Boolean(errors.name)} />
+              <Input id="name" autoComplete="name" {...register('name')} aria-invalid={Boolean(errors.name)} />
               {errors.name && <p className="mt-1.5 text-xs text-safety">{errors.name.message}</p>}
             </div>
             <div>
               <Label htmlFor="email" className="mb-2 block text-ink-muted">Email</Label>
-              <Input id="email" type="email" {...register('email')} aria-invalid={Boolean(errors.email)} />
+              <Input id="email" autoComplete="email" type="email" {...register('email')} aria-invalid={Boolean(errors.email)} />
               {errors.email && <p className="mt-1.5 text-xs text-safety">{errors.email.message}</p>}
             </div>
             <div>
-              <Label htmlFor="organization" className="mb-2 block text-ink-muted">Organization</Label>
-              <Input id="organization" {...register('organization')} aria-invalid={Boolean(errors.organization)} />
+              <Label htmlFor="organization" className="mb-2 block text-ink-muted">Organization (optional)</Label>
+              <Input id="organization" autoComplete="organization" {...register('organization')} aria-invalid={Boolean(errors.organization)} />
               {errors.organization && <p className="mt-1.5 text-xs text-safety">{errors.organization.message}</p>}
             </div>
             <div>
               <Label htmlFor="message" className="mb-2 block text-ink-muted">Message</Label>
-              <Textarea id="message" {...register('message')} className="min-h-[120px]" aria-invalid={Boolean(errors.message)} />
+              <Textarea id="message" placeholder={topic.starter || "How can we help?"} {...register('message')} className="min-h-[120px]" aria-invalid={Boolean(errors.message)} />
               {errors.message && <p className="mt-1.5 text-xs text-safety">{errors.message.message}</p>}
             </div>
 
@@ -155,12 +167,16 @@ export function ContactPage() {
               <input id="company_website" type="text" tabIndex={-1} autoComplete="off" {...register('company_website')} />
             </div>
 
-            {turnstileEnabled && <Turnstile onToken={setTurnstileToken} className="pt-1" />}
+            {turnstileEnabled && <Turnstile key={verificationAttempt} onToken={setTurnstileToken} className="pt-1" />}
 
+            <p className="text-xs leading-relaxed text-ink-muted">
+              We use these details to respond to your inquiry. Please do not send confidential research
+              or sensitive personal information. Read our <a href="/privacy" className="text-safety hover:underline">Privacy Notice</a>.
+            </p>
             <Button type="submit" disabled={isPending} className="w-full bg-safety text-white hover:bg-safety/90">
               {isPending ? 'Sending…' : 'Send message'}
             </Button>
-          </form>
+          </form>}
         </div>
       </div>
     </div>

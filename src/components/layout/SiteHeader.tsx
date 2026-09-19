@@ -20,8 +20,8 @@ type NavEntry = {
 // (top-level nav → /asilia), kept separate the way antigravity.google stands apart
 // from google.com. It will move to its own subdomain later.
 const TECHNOLOGY: NavLink[] = [
-  { label: 'Foundation Models', desc: 'Coming soon', to: '/technology/foundation-models' },
-  { label: 'Autonomous Discovery', desc: 'Coming soon', to: '/technology/autonomous-discovery' },
+  { label: 'Foundation Models', desc: 'Research direction', to: '/technology/foundation-models' },
+  { label: 'Autonomous Discovery', desc: 'Research direction', to: '/technology/autonomous-discovery' },
 ];
 
 const COMPANY: NavLink[] = [
@@ -34,7 +34,7 @@ const COMPANY: NavLink[] = [
 const NAV: NavEntry[] = [
   { label: 'Asilia', to: '/asilia' },
   { label: 'Technology', items: TECHNOLOGY },
-  { label: 'Company', items: COMPANY },
+  { label: 'About', items: COMPANY },
   { label: 'News', to: '/news' },
 ];
 
@@ -225,6 +225,7 @@ export function SiteHeader() {
           className={cn('md:hidden', darkTop ? 'text-white' : 'text-ink')}
           onClick={() => setOpen((v) => !v)}
           aria-label="Toggle menu"
+          aria-expanded={open}
         >
           {open ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
         </button>

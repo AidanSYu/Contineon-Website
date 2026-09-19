@@ -2,13 +2,6 @@ import { Link, useLocation } from 'react-router-dom';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 
-/* =============================================================================
-   ComingSoonPage, a placeholder for pages whose content isn't written yet
-   (currently the Technology pillars). Keeps the URL real and shareable, states
-   what's coming, and routes intent to the contact form. Swap for the real page
-   when the section is built out.
-   ============================================================================= */
-
 export function ComingSoonPage({
   title,
   kicker = 'TECHNOLOGY',
@@ -32,15 +25,21 @@ export function ComingSoonPage({
 
         <div className="mx-auto mt-9 flex items-center justify-center gap-2.5">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-safety" />
-          <span className="lab-label text-ink-faint">Coming soon</span>
+          <span className="lab-label text-ink-faint">Research direction</span>
         </div>
 
+        <p className="mt-6 text-sm leading-relaxed text-ink-muted">
+          {pathname.endsWith('foundation-models')
+            ? 'We are exploring models that connect experimental planning with observations from physical systems. Evaluation needs to account for uncertainty, reproducibility, and the limits of each instrument.'
+            : 'We are exploring how systems can propose questions, choose experiments, and revise hypotheses while keeping scientists responsible for safety and interpretation.'}
+          {' '}This is a research direction, not a released product. We have no public release date or benchmark announcement for this work.
+        </p>
         <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
           <Link
-            to="/contact?topic=partner"
+            to="/contact"
             className="inline-flex items-center gap-1.5 rounded-full bg-safety px-5 py-2.5 text-[15px] font-medium text-white transition-colors hover:bg-safety/90"
           >
-            Request access <ArrowRight className="h-4 w-4" />
+            Discuss the research <ArrowRight className="h-4 w-4" />
           </Link>
           <Link
             to="/"

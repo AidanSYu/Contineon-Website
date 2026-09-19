@@ -89,7 +89,7 @@ async function sendReminder(email: string, trialEnd: string): Promise<boolean> {
     body: JSON.stringify({
       from,
       to: email,
-      subject: 'Your contAInuum trial ends soon',
+      subject: 'Your Contineon trial ends soon',
       html: `<p>Your free trial ends on <strong>${ends}</strong>.</p>
              <p>Your plan will begin automatically so your campaigns keep running. You can review or
              change your plan anytime from your billing page:</p>

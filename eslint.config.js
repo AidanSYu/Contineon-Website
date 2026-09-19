@@ -27,7 +27,7 @@ export default defineConfig([
      dev-only HMR hints, not correctness issues, so silence them here rather
      than diverge from upstream shadcn. */
   {
-    files: ['src/components/ui/**/*.{ts,tsx}', 'src/lib/scroll-fx.tsx'],
+    files: ['src/components/ui/**/*.{ts,tsx}', 'src/lib/scroll-fx.tsx', 'src/components/Seo.tsx'],
     rules: {
       'react-refresh/only-export-components': 'off',
       'react-hooks/purity': 'off',

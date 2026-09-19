@@ -3,6 +3,7 @@ import { Outlet, useLocation } from 'react-router-dom';
 import { GrainOverlay } from '@/components/effects';
 import { SmoothScroll } from '@/components/motion';
 import { SiteHeader } from './SiteHeader';
+import { NewsletterStatus } from '@/components/marketing/NewsletterStatus';
 import { SiteFooter } from './SiteFooter';
 
 const CommandMenu = lazy(() =>
@@ -51,7 +52,7 @@ export function MarketingLayout() {
   // Scroll to top on navigation, or to a #section when a hash is present.
   useEffect(() => {
     if (hash) {
-      const el = document.querySelector(hash);
+      const el = document.getElementById(hash.slice(1));
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
         return;
@@ -66,6 +67,7 @@ export function MarketingLayout() {
       <GrainOverlay />
       <DeferredCommandMenu />
       <SiteHeader />
+      <NewsletterStatus />
       <main className="relative">
         <Outlet />
       </main>

@@ -1,3 +1,4 @@
+import { flags } from '@/lib/flags';
 import { useEffect, useMemo, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
@@ -127,12 +128,12 @@ export function AdminEscrowPage() {
     <div className="space-y-8">
       <div className="flex flex-wrap items-end justify-between gap-4 border-b border-line pb-6">
         <div>
-          <p className="lab-label text-safety">ADMIN · ESCROW</p>
+          <p className="lab-label text-safety">ADMIN · ENGAGEMENTS</p>
           <h1 className="mt-2 font-display text-3xl font-bold tracking-tight text-ink">
-            Escrow console
+            Pilot engagements
           </h1>
           <p className="mt-1 text-ink-muted">
-            Create agreements, then release or refund milestones once work is verified.
+            {flags.payments ? 'Create agreements, then release or refund milestones once work is verified.' : 'New paid engagements are closed. Existing engagements can still be reviewed and refunded.'}
           </p>
         </div>
 
@@ -144,13 +145,13 @@ export function AdminEscrowPage() {
           }}
         >
           <DialogTrigger asChild>
-            <Button className="bg-safety text-white hover:bg-safety/90">
+            <Button disabled={!flags.payments} className="bg-safety text-white hover:bg-safety/90">
               <Plus className="mr-2 h-4 w-4" /> New agreement
             </Button>
           </DialogTrigger>
           <DialogContent className="max-h-[85vh] overflow-y-auto sm:max-w-lg">
             <DialogHeader>
-              <DialogTitle>Create an escrow agreement</DialogTitle>
+              <DialogTitle>Create a pilot agreement</DialogTitle>
               <DialogDescription>
                 Assign it to a customer and define the milestones that release the held funds.
               </DialogDescription>
@@ -265,7 +266,7 @@ export function AdminEscrowPage() {
           <ShieldCheck className="mx-auto h-10 w-10 text-ink-faint" strokeWidth={1.3} />
           <p className="mt-4 font-display text-lg text-ink">No agreements yet</p>
           <p className="mt-1 text-sm text-ink-muted">
-            Create the first escrow agreement to get started.
+            Pilot agreements will appear here once created.
           </p>
         </div>
       )}

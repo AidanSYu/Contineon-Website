@@ -14,7 +14,7 @@ export function AsiliaLayout() {
   // Scroll to top on navigation, or to a #section when a hash is present.
   useEffect(() => {
     if (hash) {
-      const el = document.querySelector(hash);
+      const el = document.getElementById(hash.slice(1));
       if (el) {
         el.scrollIntoView({ behavior: 'smooth' });
         return;
@@ -42,7 +42,7 @@ function AsiliaFooter() {
     <footer className="border-t border-white/10 py-10">
       <div className="site-shell flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <p className="text-[13px] text-white/40">
-          © {new Date().getFullYear()} Contineon. Asilia is a Contineon product.
+          © {new Date().getFullYear()} Contineon. An independent project in development.
         </p>
         <nav className="flex items-center gap-5 text-[13px] text-white/50">
           <Link to="/" className="transition-colors hover:text-white">

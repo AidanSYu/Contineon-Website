@@ -6,9 +6,9 @@ import { subscribeSchema, type SubscribeInput } from '@/lib/validation';
  * Edge Function, which verifies Turnstile, stores a pending row, and emails a
  * double-opt-in confirmation link.
  */
-export async function subscribe(input: SubscribeInput): Promise<void> {
+export async function subscribe(input: SubscribeInput): Promise<{ alreadyConfirmed?: boolean }> {
   if (!isBackendConfigured) {
-    throw new Error('Backend is not configured yet. Add Supabase keys to .env.local.');
+    throw new Error('Newsletter signup is unavailable. Please contact hello@contineon.com.');
   }
 
   const payload = subscribeSchema.parse(input);
@@ -27,4 +27,5 @@ export async function subscribe(input: SubscribeInput): Promise<void> {
     const body = (await res.json().catch(() => ({}))) as { error?: string };
     throw new Error(body.error ?? 'Could not subscribe. Please try again.');
   }
+  return res.json() as Promise<{ alreadyConfirmed?: boolean }>;
 }

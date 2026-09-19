@@ -95,7 +95,8 @@ suite('Edge Functions (integration)', () => {
       const email = uniqueEmail('news');
 
       const sub = await callFn('newsletter-subscribe', { body: { email, source: 'itest' } });
-      expect(sub.status).toBe(200);
+      // This local stack has no email provider configured: do not claim delivery.
+      expect(sub.status).toBe(503);
 
       const admin = serviceClient();
       const { data: before } = await admin
@@ -119,7 +120,14 @@ suite('Edge Functions (integration)', () => {
     });
   });
 
-  describe('create-checkout-session (guards only — never reaches Stripe)', () => {
+  describe('prelaunch checkout gate', () => {
+    it.skipIf(process.env.TEST_PAYMENTS_ENABLED === 'true')('refuses new checkout by default', async () => {
+      const { status } = await callFn('create-checkout-session', { body: { plan_id: 'starter' } });
+      expect(status).toBe(403);
+    });
+  });
+
+  describe.skipIf(process.env.TEST_PAYMENTS_ENABLED !== 'true')('create-checkout-session (enabled catalog guards)', () => {
     it('returns 401 when the caller is not a real user', async () => {
       // Anon key is a valid JWT but resolves to no user → function returns 401.
       const { status } = await callFn('create-checkout-session', { body: { plan_id: 'starter' } });

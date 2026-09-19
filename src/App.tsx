@@ -1,6 +1,7 @@
 import { Suspense, lazy } from 'react';
 import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 
+import { flags } from '@/lib/flags';
 import { Spinner } from '@/components/ui/spinner';
 
 /* Route-level code splitting, including route chrome and access guards. Keeping
@@ -184,7 +185,7 @@ function App() {
         {/* Auth */}
         <Route element={<AuthLayout />}>
           <Route path="login" element={<LoginPage />} />
-          <Route path="signup" element={<SignupPage />} />
+          <Route path="signup" element={flags.publicSignup ? <SignupPage /> : <Navigate to="/contact?topic=partner" replace />} />
           <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
         </Route>

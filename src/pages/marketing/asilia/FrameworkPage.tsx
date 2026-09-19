@@ -75,7 +75,7 @@ export function AsiliaFrameworkPage() {
             </Magnetic>
             <Magnetic>
               <Cta to={ASILIA_URL} variant="outlineLight">
-                Open the console <ArrowUpRight className="h-4 w-4" />
+                Partner sign in <ArrowUpRight className="h-4 w-4" />
               </Cta>
             </Magnetic>
           </div>
@@ -132,7 +132,7 @@ export function AsiliaFrameworkPage() {
             <div data-fade className="mt-8 flex flex-wrap gap-3">
               <Magnetic>
                 <Cta to={ASILIA_URL} variant="outlineLight">
-                  Open the console <ArrowUpRight className="h-4 w-4" />
+                  Partner sign in <ArrowUpRight className="h-4 w-4" />
                 </Cta>
               </Magnetic>
               <Magnetic>

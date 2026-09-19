@@ -1,207 +1,108 @@
-import { LegalDoc, LegalSection, LegalTemplateNotice, Placeholder, Fact } from '@/components/marketing/LegalDoc';
+import { Link } from 'react-router-dom';
+import { LegalDoc, LegalSection, ProjectStatusNotice, LegalContact } from '@/components/marketing/LegalDoc';
 import { Seo } from '@/components/Seo';
-import { legal } from '@/config/legal';
+import { legal, websiteProviders } from '@/config/legal';
 
 export function PrivacyPage() {
   return (
     <>
-      <Seo
-        title="Privacy Policy, Contineon"
-        description="How Contineon collects, uses, and protects your data."
-        path="/privacy"
-      />
-
-      <LegalDoc kicker="LEGAL" title="Privacy Policy" lastUpdated={legal.effectiveDate ?? '[EFFECTIVE DATE]'}>
-        <LegalTemplateNotice />
-
+      <Seo title="Privacy Notice, Contineon" description="How the Contineon website handles inquiries, newsletter subscriptions, and account information." path="/privacy" />
+      <LegalDoc kicker="LEGAL" title="Privacy Notice" lastUpdated={legal.effectiveDate}>
+        <ProjectStatusNotice />
         <p>
-          This Privacy Policy explains what information <Fact value={legal.entityName} placeholder="[LEGAL ENTITY NAME]" />{' '}
-          ("Contineon", "we", "us") collects, how we use it, and the choices you have. It applies to
-          our marketing website, the account/dashboard area, and the Asilia platform (together, the
-          "Service"). It is written to describe how the Service actually handles data today.
+          This notice describes personal information handled through this website by the people
+          operating the Contineon project. It covers website visits, inquiries, launch updates,
+          and invited website accounts. It does not describe a deployed Asilia lab environment;
+          any pilot’s data flows and responsibilities must be agreed before lab data is connected.
         </p>
-
-        <LegalSection n="1" heading="Information we collect">
+        <LegalSection n="1" heading="What we collect and why">
+          <ul className="ml-5 list-disc space-y-3">
+            <li><strong className="text-ink">Inquiries.</strong> Your name, email, optional organization,
+              selected topic, and message help us respond to requests. Emailing us directly also shares
+              your email address and message with our email service. Do not include sensitive or
+              confidential research in an initial inquiry.</li>
+            <li><strong className="text-ink">Launch updates.</strong> If newsletter signup is available
+              and you choose to subscribe, we store your email, signup source, timestamps, and
+              confirmation status. A confirmation link verifies your subscription before it is activated.
+              Signing up for updates is separate from contacting us or requesting access.</li>
+            <li><strong className="text-ink">Invited accounts.</strong> Account records include email,
+              name, authentication and session information, access role, and any project records
+              entered in the website dashboard. These support account access and requested functions.</li>
+            <li><strong className="text-ink">Security and delivery.</strong> Hosting and security providers
+              may process IP addresses, browser information, and request logs. Our contact database stores
+              an IP hash for abuse prevention, rather than a raw IP address. This does not prevent hosting
+              providers or bot protection services from processing a raw IP address.</li>
+          </ul>
+          <p>We do not sell personal information or use contact messages to train shared models.
+            This website does not ask you to submit payment-card details through its contact forms.</p>
+        </LegalSection>
+        <LegalSection n="2" heading="Storage in your browser">
           <p>
-            <strong className="text-ink">Account information.</strong> When you create an account we
-            store your email address and the full name you provide at sign-up. Email is held in our
-            authentication system; your name is stored in your profile record. We also store a role
-            flag used for access control.
-          </p>
-          <p>
-            <strong className="text-ink">Billing information.</strong> Contineon does not currently
-            operate self-serve payments and does not collect or store card or billing details through
-            this site. Where a design-partner pilot involves fees, those are handled under a separate
-            engagement agreement. <Placeholder>[REVIEW WITH COUNSEL]</Placeholder>
-          </p>
-          <p>
-            <strong className="text-ink">Contact form.</strong> When you submit the contact form we
-            store the name, email, optional organization, and message you provide. For anti-abuse
-            purposes we also store a one-way <strong className="text-ink">SHA-256 hash of your IP
-            address</strong>, never the raw IP. Submissions are screened with Cloudflare Turnstile to
-            block automated abuse.
-          </p>
-          <p>
-            <strong className="text-ink">Newsletter / waitlist.</strong> If you subscribe, we store
-            your email address, the source of the sign-up, and your confirmation status. We use{' '}
-            <strong className="text-ink">double opt-in</strong>: a confirmation email is sent and your
-            subscription is only activated after you click the link. You can unsubscribe at any time.
-          </p>
-          <p>
-            <strong className="text-ink">Authentication &amp; session data.</strong> We use cookies
-            and similar local storage to keep you signed in and to maintain your session securely.
-            These are necessary for the account area to function.
-          </p>
-          <p>
-            <strong className="text-ink">Lab content.</strong> The campaigns, protocols, traces,
-            results, and knowledge graph you create or connect within Asilia are processed to provide
-            the Service to your account. <Placeholder>[REVIEW WITH COUNSEL]</Placeholder>, confirm the
-            scope of lab-content processing and any feature-specific data flows before launch.
-          </p>
-          <p>
-            <strong className="text-ink">Operational logs.</strong> We process server and security
-            logs needed to operate, debug, and protect the Service.
+            The website uses browser storage for preferences such as your color theme and, if you
+            sign in, your authentication session. Bot protection may use additional browser signals
+            and storage when enabled. We do not run advertising pixels or advertising cookies in
+            this website’s application code.
           </p>
         </LegalSection>
-
-        <LegalSection n="2" heading="How we use information">
-          <p>
-            We use information to: create and secure your account; provide the Service and its
-            features; respond to contact and
-            support requests; send transactional and (with consent) newsletter email; prevent abuse
-            and fraud; and operate, debug, and improve the Service. We do not sell your personal data
-            or your lab content, and we do not use the contents of your contact message for any
-            purpose other than responding to and securing that communication.
-          </p>
-        </LegalSection>
-
-        <LegalSection n="3" heading="Legal bases">
-          <p>
-            Where applicable law (such as the GDPR) requires a legal basis, we rely on: performance of
-            our contract with you (providing the Service); your consent (newsletter
-            email); our legitimate interests (securing the Service, preventing abuse, and basic
-            operational analytics); and compliance with legal obligations. <Placeholder>[REVIEW WITH COUNSEL]</Placeholder>{' '}
-           , confirm the legal bases and consent mechanics for your target jurisdictions.
-          </p>
-        </LegalSection>
-
-        <LegalSection n="4" heading="Subprocessors & sharing">
-          <p>
-            We share data with a small set of service providers who process it on our behalf, under
-            contract, only to deliver their service to us:
-          </p>
-          <ul className="ml-5 list-disc space-y-1.5">
-            <li>
-              <strong className="text-ink">Supabase</strong>, database, authentication, and edge
-              functions (stores account, contact, and newsletter records).
-            </li>
-            <li>
-              <strong className="text-ink">Cloudflare</strong>, Turnstile bot mitigation on public
-              forms (and edge delivery, where used).
-            </li>
-            <li>
-              <strong className="text-ink">Resend</strong>, transactional and confirmation email
-              delivery (contact notifications and newsletter double opt-in).
-            </li>
-            <li>
-              <strong className="text-ink"><Fact value={legal.hostingProvider} placeholder="[HOSTING/CDN PROVIDER, e.g. Vercel or Cloudflare]" /></strong>{' '}
-             , website and application hosting and content delivery.
-            </li>
+        <LegalSection n="3" heading="Service providers and sharing">
+          <p>The website uses these services where the corresponding functions are enabled:</p>
+          <ul className="ml-5 list-disc space-y-2">
+            {websiteProviders.map((provider) => (
+              <li key={provider.name}><strong className="text-ink">{provider.name}</strong>: {provider.role}.</li>
+            ))}
           </ul>
           <p>
-            We may also disclose information where required by law or to protect the rights, safety,
-            and security of users and the Service. We do not sell your data. A current list of
-            subprocessors is also summarized on our{' '}
-            <a href="/security" className="text-safety hover:underline">Security page</a>.
+            Information may also be disclosed when required by law or necessary to address fraud,
+            security incidents, or legal claims. Providers may process information outside your
+            country. Contact us about processing locations and arrangements before sharing data
+            subject to residency or transfer restrictions.
           </p>
         </LegalSection>
-
-        <LegalSection n="5" heading="Data retention">
+        <LegalSection n="4" heading="Reasons for processing">
           <p>
-            We retain account and lab content while your account is active and for a reasonable period
-            afterward so you can export it, then delete or anonymize it unless a longer period is
-            required by law. Contact-form submissions are retained for support and anti-abuse purposes
-            and then deleted on a periodic basis. Newsletter records are retained until you
-            unsubscribe.{' '}
-            {legal.retentionPeriods ?? (
-              <>
-                <Placeholder>[RETENTION PERIODS]</Placeholder>, set concrete retention windows with
-                counsel.
-              </>
-            )}
+            Where applicable data protection law requires a legal basis, we rely on consent for
+            optional launch updates; our legitimate interests in answering inquiries and operating
+            and protecting the website; steps you request before entering an agreement or performance
+            of an agreement for relevant account services; and legal obligations where they apply.
+            You can withdraw newsletter consent without affecting earlier processing.
           </p>
         </LegalSection>
-
-        <LegalSection n="6" heading="Security">
+        <LegalSection n="5" heading="How long information is kept">
           <p>
-            We use measures such as encryption in transit (TLS), database row-level security and
-            tenant isolation, hardened authentication, and least-privilege access for our processors.
-            No system is perfectly secure, but we
-            work to reduce risk and to notify you of incidents as required by law. See our{' '}
-            <a href="/security" className="text-safety hover:underline">Security page</a> for more.
+            Retention depends on the purpose: whether an inquiry is still active, whether an account
+            is still needed, whether you remain subscribed, and whether records are needed to address
+            abuse, a dispute, or a legal obligation. Contact us to request deletion or ask about a
+            particular record. Backup and provider-log retention may differ from active records;
+            deletion from every backup is not immediate.
           </p>
         </LegalSection>
-
-        <LegalSection n="7" heading="International transfers">
+        <LegalSection n="6" heading="Your choices and requests">
           <p>
-            Our processors may store and process data in countries other than your own (for example,
-            in the United States and the European Union). Where required, we rely on appropriate
-            safeguards such as standard contractual clauses. <Placeholder>[REVIEW WITH COUNSEL]</Placeholder>{' '}
-           , confirm hosting/processing regions and transfer mechanisms for your subprocessors.
+            Email <a href={`mailto:${legal.contactEmail}`} className="text-safety hover:underline">{legal.contactEmail}</a>{' '}
+            to request access, correction, a copy, or deletion of your information, or to unsubscribe
+            from launch updates. For an unsubscribe request, use the subscribed address and put
+            “Unsubscribe” in the subject. We may ask for information needed to verify a request.
+          </p>
+          <p>
+            Depending on your location, you may also have rights to restrict or object to processing,
+            portability, and to complain to your local data protection authority. We handle requests
+            according to applicable law. Contacting us does not limit your right to complain to an authority.
           </p>
         </LegalSection>
-
-        <LegalSection n="8" heading="Your rights & choices">
+        <LegalSection n="7" heading="Security and intended audience">
           <p>
-            Depending on where you live, you may have rights to access, correct, export, delete, or
-            restrict the processing of your personal data, and to object to certain processing or
-            withdraw consent. In practice:
-          </p>
-          <ul className="ml-5 list-disc space-y-1.5">
-            <li>
-              <strong className="text-ink">Access &amp; export.</strong> You can export your lab
-              content, including your knowledge graph, from within the Service, and you may request a
-              copy of the account data we hold.
-            </li>
-            <li>
-              <strong className="text-ink">Deletion.</strong> You can request deletion of your account
-              and associated personal data.
-            </li>
-            <li>
-              <strong className="text-ink">Newsletter.</strong> You can withdraw consent and
-              unsubscribe at any time.
-            </li>
-          </ul>
-          <p>
-            To exercise any of these rights, contact us using the details below. We will respond
-            within the timeframes required by applicable law.
+            This website is intended for professional research inquiries, not for children. Please
+            contact us if you believe a child has submitted personal information so we can address it.
+            See our <Link to="/security" className="text-safety hover:underline">Security page</Link> for
+            the website’s current controls and limitations. No online system is completely secure.
           </p>
         </LegalSection>
-
-        <LegalSection n="9" heading="Children's privacy">
+        <LegalSection n="8" heading="Updates and contact">
           <p>
-            The Service is intended for use by professionals and organizations and is not directed to
-            children. We do not knowingly collect personal data from children.{' '}
-            <Placeholder>[REVIEW WITH COUNSEL]</Placeholder>, confirm the applicable minimum-age
-            statement for your jurisdictions.
+            We will revise this notice when our practices or operator change and update the date
+            above. A future incorporated entity will be identified here if it takes over operation.
           </p>
-        </LegalSection>
-
-        <LegalSection n="10" heading="Changes to this policy">
-          <p>
-            We may update this policy from time to time. Material changes will be communicated through
-            the Service or by email, and the "Last updated" date above will change.
-          </p>
-        </LegalSection>
-
-        <LegalSection n="11" heading="Contact">
-          <p>
-            Privacy questions or requests can be sent to{' '}
-            <a href="mailto:hello@contineon.io" className="text-safety hover:underline">hello@contineon.io</a>.
-            The data controller is <Fact value={legal.entityName} placeholder="[LEGAL ENTITY NAME]" />, located at{' '}
-            <Fact value={legal.registeredAddress} placeholder="[REGISTERED ADDRESS]" />.{' '}
-            <Fact value={legal.dpoOrEuRepresentative} placeholder="[DPO / EU REPRESENTATIVE, IF REQUIRED]" />.
-          </p>
+          <LegalContact />
         </LegalSection>
       </LegalDoc>
     </>

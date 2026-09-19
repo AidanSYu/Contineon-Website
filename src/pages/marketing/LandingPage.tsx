@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { Seo } from '@/components/Seo';
+import { Seo, JsonLd, ORGANIZATION_JSONLD, SITE_URL } from '@/components/Seo';
 import { Magnetic, ParticleField } from '@/components/motion';
 import { Cta } from '@/components/marketing/ui';
 import { GridField } from '@/components/marketing/visuals';
@@ -321,6 +321,21 @@ export function LandingPage() {
         title="Contineon, industrializing breakthrough science"
         description="Contineon builds the autonomous laboratory: foundational models that design an experiment, run it on real instruments, learn from the result, and choose what to run next. The first is Asilia."
         path="/"
+      />
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@graph': [
+            ORGANIZATION_JSONLD,
+            {
+              '@type': 'WebSite',
+              '@id': `${SITE_URL}/#website`,
+              name: 'Contineon',
+              url: `${SITE_URL}/`,
+              publisher: { '@id': `${SITE_URL}/#organization` },
+            },
+          ],
+        }}
       />
 
       <Hero />

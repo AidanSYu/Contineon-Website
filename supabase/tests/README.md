@@ -44,13 +44,21 @@ If no stack is reachable, **the suite skips itself** (prints a hint and exits 0)
 |---|---|
 | `handle_new_user` trigger | creating an auth user auto-creates its `profiles` row |
 | `contact` | stores valid messages; 400 on bad email; honeypot stores nothing |
-| `newsletter-subscribe` + `newsletter-confirm` | pending → confirmed via token link |
-| `create-checkout-session` | 401 (no user), 400 (unknown plan), 400 (unpriced plan) |
+| `newsletter-subscribe` + `newsletter-confirm` | 503 without email delivery; stored pending record → confirmed using a test-read token |
+| `create-checkout-session` | 403 with payments disabled; optional enabled-mode auth and catalog guards |
 | `create-portal-session` | 401 (no user), 400 (no Stripe customer yet) |
 
-Turnstile, Resend, and Stripe all degrade gracefully without secrets
-(captcha/email skipped; Stripe is never reached because every case returns at a
-guard first), so the suite needs **zero** third-party keys.
+For the local function runtime, explicitly set `ALLOW_INSECURE_NO_CAPTCHA=true`
+(local testing only). Leave Resend credentials unset for this suite: newsletter signup must
+return 503 when email cannot be sent. The test reads the pending token from its local database
+to test confirmation separately; it does not verify real email delivery.
+
+Payment endpoints default to closed. To also run the existing catalog guard tests, set
+`PAYMENTS_ENABLED=true` in the **local Edge Function runtime** and invoke the test runner with
+`TEST_PAYMENTS_ENABLED=true`. Never use live payment credentials for these tests.
+The shared Stripe client needs a nonempty test/dummy key to initialize even for guards;
+these cases never make a Stripe API request. `npm test` also exercises the actual newsletter
+and payment handlers with mocked provider/database boundaries, without a local stack.
 
 ## Adding the Stripe happy paths (optional)
 

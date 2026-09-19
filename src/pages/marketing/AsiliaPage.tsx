@@ -3,7 +3,6 @@ import { Seo } from '@/components/Seo';
 import { Magnetic } from '@/components/motion';
 import { Cta } from '@/components/marketing/ui';
 import { GridField } from '@/components/marketing/visuals';
-import { VideoFrame } from '@/components/marketing/VideoFrame';
 import { ConsolePreview } from '@/components/marketing/ConsolePreview';
 import { CREDITS } from '@/lib/mediaCredits';
 import { Cinematic, Section, ASILIA_URL } from './asilia/shared';
@@ -59,7 +58,7 @@ export function AsiliaPage() {
             </Magnetic>
             <Magnetic>
               <Cta to={ASILIA_URL} variant="outlineLight">
-                Open the console <ArrowUpRight className="h-4 w-4" />
+                Partner sign in <ArrowUpRight className="h-4 w-4" />
               </Cta>
             </Magnetic>
           </div>
@@ -87,12 +86,12 @@ export function AsiliaPage() {
         <div className="mx-auto max-w-6xl 2xl:max-w-[88rem]">
           <div className="mx-auto max-w-2xl text-center">
             <h2 data-title className="text-[clamp(30px,4.4vw,88px)] font-bold leading-[1.0] tracking-[-0.04em]">
-              Watch a campaign think.
+              Explore the campaign workflow.
             </h2>
           </div>
           <div data-fade className="mt-12">
-            {/* Drop the finished film into `src` and this becomes a click-to-play player. */}
-            <VideoFrame poster="/images/iss-hero-poster.jpg" label="Asilia Framework demo" />
+            {/* Request a walkthrough until a recorded product demonstration is available. */}
+            <ConsolePreview label="Asilia Framework walkthrough" />
           </div>
         </div>
       </Section>
@@ -167,7 +166,7 @@ export function AsiliaPage() {
             </Magnetic>
             <Magnetic>
               <Cta to={ASILIA_URL} variant="outlineLight">
-                Open the console <ArrowUpRight className="h-4 w-4" />
+                Partner sign in <ArrowUpRight className="h-4 w-4" />
               </Cta>
             </Magnetic>
           </div>

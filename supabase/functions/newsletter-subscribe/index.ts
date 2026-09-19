@@ -21,7 +21,7 @@ Deno.serve(async (req) => {
     if (!body || typeof body !== 'object') return json({ error: 'Invalid body' }, 400, req);
 
     const email = String(body.email ?? '').trim().toLowerCase();
-    const source = String(body.source ?? '').trim() || null;
+    const source = String(body.source ?? '').trim().slice(0, 100) || null;
     const honeypot = String(body.company_website ?? '');
     const token = String(body.turnstileToken ?? '');
 
@@ -38,27 +38,32 @@ Deno.serve(async (req) => {
       { auth: { persistSession: false } },
     );
 
-    // Upsert: keep idempotent if someone subscribes twice.
-    const { data, error } = await supabase
+    // Insert without resetting an existing subscriber's consent state.
+    const { error: insertError } = await supabase
       .from('subscribers')
-      .upsert(
-        { email, source, status: 'pending' },
-        { onConflict: 'email', ignoreDuplicates: false },
-      )
-      .select('confirm_token, status')
-      .single();
+      .upsert({ email, source, status: 'pending' }, { onConflict: 'email', ignoreDuplicates: true });
+    if (insertError) return json({ error: 'Could not subscribe.' }, 500, req);
 
-    if (error || !data) {
-      console.error('upsert subscribers failed:', error);
-      return json({ error: 'Could not subscribe.' }, 500, req);
-    }
-
-    // Already confirmed — nothing more to do.
+    const { data, error } = await supabase.from('subscribers')
+      .select('confirm_token, status').eq('email', email).single();
+    if (error || !data) return json({ error: 'Could not subscribe.' }, 500, req);
     if (data.status === 'confirmed') return json({ ok: true, alreadyConfirmed: true }, 200, req);
 
-    await sendConfirmation(email, data.confirm_token as string).catch((e) =>
-      console.error('confirmation email failed:', e),
-    );
+    let confirmToken = data.confirm_token as string;
+    if (data.status === 'unsubscribed') {
+      // A fresh request needs fresh consent; old confirmation links stay invalid.
+      const { data: renewed, error: renewError } = await supabase.from('subscribers')
+        .update({ status: 'pending', confirm_token: crypto.randomUUID(), confirmed_at: null })
+        .eq('email', email).eq('status', 'unsubscribed').select('confirm_token').maybeSingle();
+      if (renewError || !renewed) return json({ error: 'Please try subscribing again.' }, 409, req);
+      confirmToken = renewed.confirm_token;
+    }
+
+    try {
+      await sendConfirmation(email, confirmToken);
+    } catch {
+      return json({ error: 'We could not send your confirmation email. Please try again later or contact hello@contineon.com.' }, 503, req);
+    }
 
     return json({ ok: true }, 200, req);
   } catch (e) {
@@ -74,12 +79,10 @@ async function sendConfirmation(email: string, token: string): Promise<void> {
   const confirmUrl = `${functionsUrl}/newsletter-confirm?token=${encodeURIComponent(token)}`;
 
   if (!apiKey || !from) {
-    // Not configured: log the link so dev can confirm manually.
-    console.log('[dev] confirmation link:', confirmUrl);
-    return;
+    throw new Error('Newsletter email delivery is not configured.');
   }
 
-  await fetch('https://api.resend.com/emails', {
+  const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       Authorization: `Bearer ${apiKey}`,
@@ -88,10 +91,11 @@ async function sendConfirmation(email: string, token: string): Promise<void> {
     body: JSON.stringify({
       from,
       to: email,
-      subject: 'Confirm your subscription to contAInuum',
+      subject: 'Confirm your subscription to Contineon',
       html: `<p>Confirm your subscription by clicking the link below:</p>
              <p><a href="${confirmUrl}">Confirm subscription</a></p>
              <p>If you didn't request this, you can ignore this email.</p>`,
     }),
   });
+  if (!response.ok) throw new Error('Confirmation email provider rejected the request.');
 }

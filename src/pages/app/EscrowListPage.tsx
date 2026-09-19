@@ -28,13 +28,13 @@ export function EscrowListPage() {
     next.delete('checkout');
 
     if (checkout === 'success') {
-      toast.success('Funds received! Your escrow is being confirmed.');
+      toast('Checkout returned. Payment status will update after confirmation.');
       const t = setTimeout(() => qc.invalidateQueries({ queryKey: ['agreements'] }), 1500);
       setParams(next, { replace: true });
       return () => clearTimeout(t);
     }
     if (checkout === 'cancel') {
-      toast('Funding canceled, no charge was made.');
+      toast('Checkout canceled. Check your engagement for its current payment status.');
       setParams(next, { replace: true });
     }
   }, [params, setParams, qc]);

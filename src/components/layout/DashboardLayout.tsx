@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { Logo } from './Logo';
 import { ThemeToggle } from './ThemeToggle';
+import { NoIndex } from '@/components/Seo';
 import { getMyProfile } from '@/lib/api/profiles';
 import { useAuth } from '@/lib/auth';
 import { queryClient } from '@/lib/queryClient';
@@ -31,6 +32,7 @@ const NAV = [
 export function DashboardLayout() {
   return (
     <QueryClientProvider client={queryClient}>
+      <NoIndex title="Dashboard, Contineon" />
       <DashboardShell />
     </QueryClientProvider>
   );

@@ -46,6 +46,9 @@ Deno.serve(async (req) => {
 
     switch (action) {
       case 'create_agreement':
+        if (Deno.env.get('PAYMENTS_ENABLED') !== 'true') {
+          return json({ error: 'New paid engagements are not enabled.' }, 403, req);
+        }
         return await createAgreement(admin, user.id, body, req);
       case 'release_milestone':
         return await releaseMilestone(admin, body, req);
@@ -175,7 +178,7 @@ async function createAgreement(
       const link = `${SITE_URL}/app/escrow/${agreement.id}`;
       await sendCustomerEmail(
         email,
-        'Your contAInuum pilot engagement is ready to fund',
+        'Your Contineon pilot engagement is ready to fund',
         `<p>Your design-partner pilot engagement <strong>${escapeHtml(title)}</strong> is ready.</p>
          <p>Funding it locks in your milestones and starts the work. Review the milestones and fund
          securely here:</p>
@@ -234,7 +237,7 @@ async function releaseMilestone(
       const link = `${SITE_URL}/app/escrow/${agreement.id}`;
       await sendCustomerEmail(
         email,
-        'A milestone on your contAInuum engagement was completed',
+        'A milestone on your Contineon engagement was completed',
         `<p>We’ve marked the milestone <strong>${escapeHtml(milestone.title)}</strong> as completed on
          your engagement <strong>${escapeHtml(agreement.title)}</strong>.</p>
          <p>See the latest status here:</p>
@@ -315,7 +318,7 @@ async function refundMilestone(
       const link = `${SITE_URL}/app/escrow/${agreement.id}`;
       await sendCustomerEmail(
         email,
-        'A milestone on your contAInuum engagement was refunded',
+        'A milestone on your Contineon engagement was refunded',
         `<p>We’ve refunded the milestone <strong>${escapeHtml(milestone.title)}</strong> on your
          engagement <strong>${escapeHtml(agreement.title)}</strong>. The funds are being returned to
          your original payment method.</p>

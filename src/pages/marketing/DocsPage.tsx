@@ -10,7 +10,7 @@ const STEPS = [
   {
     n: '01',
     h: 'Connect your workcell',
-    p: 'Point Asilia at the instruments, ELN, and data stores you already run. Integration is over open interfaces, if a step can be scripted or its output exported, Asilia can read it. No rip-and-replace and no new instruments.',
+    p: 'Point Asilia at the instruments, ELN, and data stores you already run. Integration is over open interfaces, scriptable steps and exportable data are starting points for an integration review. No rip-and-replace and no new instruments.',
     items: ['Liquid handlers & automation', 'Plate readers & analytical instruments (e.g. LC/MS)', 'Electronic lab notebooks', 'Existing execution traces & CSV/data exports'],
   },
   {
@@ -22,14 +22,14 @@ const STEPS = [
   {
     n: '03',
     h: 'Resolve handoffs',
-    p: 'When a step needs hands, the campaign pauses and notifies a scientist, by email, Slack, or mobile depending on your plan. You return a result and the run resumes from exactly where it stopped. Corrections become training signal.',
+    p: 'A pilot should define when a campaign pauses for a scientist and which notification channels are supported. You return a result and the run resumes from exactly where it stopped. Corrections become training signal.',
     items: ['Get notified on the channel you use', 'Return a reading, file, or note', 'Run resumes with full state preserved'],
   },
   {
     n: '04',
     h: 'Watch memory compound',
-    p: 'Every campaign feeds a knowledge graph that is yours alone, recipes, failure modes, supplier quirks, lab lore. The next campaign starts smarter, and your graph and run history export with you anytime.',
-    items: ['Cross-campaign carry-over', 'Recipe & failure-mode library', 'Full lineage & one-click export'],
+    p: 'Every campaign feeds a knowledge graph that is yours alone, recipes, failure modes, supplier quirks, lab lore. The next campaign starts smarter, with export formats and offboarding procedures agreed for your pilot.',
+    items: ['Cross-campaign carry-over', 'Recipe & failure-mode library', 'Agree lineage & export requirements'],
   },
 ];
 
@@ -49,7 +49,7 @@ export function DocsPage() {
             From your workcell to a learning lab.
           </h1>
           <p className="mt-4 max-w-xl text-lg text-ink-muted">
-            A practical overview of how Asilia plugs into the lab you already run. Need specifics for
+            An evaluation guide for scoping an Asilia pilot. Capabilities and integrations must be confirmed for your lab. Need specifics for
             your stack? <a href="/contact?topic=demo" className="text-safety hover:underline">Ask us.</a>
           </p>
         </div>

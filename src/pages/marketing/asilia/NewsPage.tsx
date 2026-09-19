@@ -2,36 +2,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { Seo } from '@/components/Seo';
 
-/* Asilia news — the product's own updates feed, inside the Asilia site (not a
-   redirect back to the marketing newsroom). A clean changelog-style list on the
-   Asilia obsidian ground; company-wide news still lives at /news, linked below.
-   Entries are starter content, easy to edit. */
-
-type Post = { date: string; tag: string; title: string; excerpt: string };
-
-const POSTS: Post[] = [
-  {
-    date: 'June 2026',
-    tag: 'Product',
-    title: 'Asilia Framework enters private beta with partner labs',
-    excerpt:
-      'The autonomous lab system is now running full campaigns on partner benches, retrofitting the instruments they already operate. Access is provisioned lab by lab.',
-  },
-  {
-    date: 'May 2026',
-    tag: 'SDK',
-    title: 'Program your lab as code with the Asilia SDK',
-    excerpt:
-      'A first look at the developer kit behind Asilia: the open Asilia Protocol, plus the asilia CLI that scaffolds, builds, signs, and verifies .asilia plugin packages.',
-  },
-  {
-    date: 'April 2026',
-    tag: 'Announcement',
-    title: 'Introducing Asilia: run your lab on its own',
-    excerpt:
-      'Asilia turns a working lab into an autonomous one. It plans a campaign, runs it on the instruments you already have, and remembers everything it learns.',
-  },
-];
+import { POSTS, formatDate } from '@/content/posts';
 
 export function AsiliaNewsPage() {
   return (
@@ -57,13 +28,13 @@ export function AsiliaNewsPage() {
             {POSTS.map((post) => (
               <article key={post.title} className="group py-8">
                 <div className="flex items-center gap-3">
-                  <span className="lab-label text-white/40">{post.date}</span>
+                  <span className="lab-label text-white/40">{formatDate(post.date)}</span>
                   <span className="rounded-full border border-white/15 px-2.5 py-0.5 text-[11px] font-medium text-white/60">
-                    {post.tag}
+                    Perspective
                   </span>
                 </div>
                 <h2 className="mt-3 text-[clamp(20px,2.4vw,38px)] font-bold leading-[1.1] tracking-[-0.02em] text-white">
-                  {post.title}
+                  <Link to={`/news/${post.slug}`} className="hover:underline">{post.title}</Link>
                 </h2>
                 <p className="mt-3 text-[15px] leading-relaxed text-white/60">{post.excerpt}</p>
               </article>

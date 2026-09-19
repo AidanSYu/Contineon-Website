@@ -3,6 +3,13 @@
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
   "installCommand": "npm install",
+  "redirects": [
+    { "source": "/about", "destination": "/mission", "permanent": true },
+    { "source": "/platform", "destination": "/asilia", "permanent": true },
+    { "source": "/pricing", "destination": "/", "permanent": true },
+    { "source": "/blog", "destination": "/news", "permanent": true },
+    { "source": "/blog/:slug", "destination": "/news/:slug", "permanent": true }
+  ],
   "rewrites": [{ "source": "/((?!assets/|images/|favicon|.*\\.).*)", "destination": "/index.html" }],
   "headers": [
     {

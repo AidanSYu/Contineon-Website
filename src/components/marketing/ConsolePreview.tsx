@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { cn } from '@/lib/utils';
 
 /* Placeholder for the Asilia console. The old baked screenshot carried stale
@@ -35,7 +36,8 @@ export function ConsolePreview({ className, label = 'Asilia console' }: { classN
             <rect x="817.67" y="2787.001" width="2950.65" height="489.99" />
           </svg>
           <p className="mt-4 lab-label">{label}</p>
-          <p className="mt-2 text-sm text-ink-muted">Interactive preview coming soon</p>
+          <p className="mt-2 text-sm text-ink-muted">See the current interface in a walkthrough</p>
+          <Link to="/contact?topic=demo" className="mt-4 inline-block text-sm text-safety underline underline-offset-4">Request a walkthrough</Link>
         </div>
       </div>
     </div>

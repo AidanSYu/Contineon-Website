@@ -1,5 +1,5 @@
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import { Seo } from '@/components/Seo';
+import { Seo, JsonLd } from '@/components/Seo';
 
 /* =============================================================================
    FaqPage, objection handling for evaluating labs. Grouped by the questions a
@@ -37,11 +37,11 @@ const GROUPS: Group[] = [
       },
       {
         q: 'How long does setup take?',
-        a: 'Connecting your workcell takes an afternoon. You point Asilia at your instruments and data, define an objective, and run your first campaign the same day.',
+        a: 'Setup depends on your instruments, available interfaces, safety review, and deployment requirements. We scope the integration and timeline with you before a pilot.',
       },
       {
         q: 'Is Contineon cloud or on-premises?',
-        a: 'Asilia runs on managed, secure cloud infrastructure. Dedicated or VPC arrangements with governance controls are available for larger deployments, talk to us about your requirements.',
+        a: 'Deployment arrangements are scoped individually. Tell us your cloud, on-premises, data residency, and governance requirements so we can confirm what is feasible.',
       },
     ],
   },
@@ -50,28 +50,29 @@ const GROUPS: Group[] = [
     items: [
       {
         q: 'Is my data private? Do you train shared models on it?',
-        a: 'Your lab content is yours. By default it is used only to provide the Service to your account. Cross-lab learning, where offered, is opt-in and privacy-preserving, aggregated or differentially private, and never exposes one customer’s data to another.',
+        a: 'This website is not a lab-data upload service. Model use, training permissions, storage, and access to research data must be defined in the pilot agreement before data is connected. We do not use contact messages to train shared models.',
       },
       {
         q: 'Can I export my data if I leave?',
-        a: 'Yes. Your knowledge graph and run history export with you, by design. The data stays yours wherever you take it.',
+        a: 'Export formats, scope, and offboarding procedures need to be agreed for your pilot. This website does not provide a knowledge-graph export tool.',
       },
       {
         q: 'How do you secure my data?',
-        a: 'Encryption in transit, access controls, and tenant isolation, with SSO/SAML and audit logging available for larger deployments. See the Security page for the full picture.',
+        a: 'The website uses HTTPS, Supabase authentication, and database access policies. SSO/SAML and lab audit logging are not website features. See the Security page and discuss pilot-specific requirements with us.',
       },
     ],
   },
   {
     group: 'Access & onboarding',
     items: [
+      { q: 'Is Contineon incorporated?', a: 'Not yet. Contineon is an independent project in development. Requesting access does not create a paid subscription or pilot agreement. Any engagement must identify the actual parties and agreed scope before it begins.' },
       {
         q: 'How do I get access?',
         a: 'We onboard a small cohort of design-partner labs at a time. Request access and we will scope an early-partner pilot for your lab on the instruments you already run, no rip-and-replace.',
       },
       {
         q: 'Is there a demo?',
-        a: 'An interactive demo is on the way. In the meantime, book a live walkthrough and we will run Asilia against a campaign close to your own.',
+        a: 'Request a walkthrough and tell us what you would like to evaluate. We will confirm the available demonstration and its scope with you.',
       },
       {
         q: 'What support do I get?',
@@ -88,6 +89,21 @@ export function FaqPage() {
         title="FAQ, Contineon"
         description="Answers to common questions about Asilia: instruments and integrations, data privacy and security, setup time, and how to get access."
         path="/faq"
+      />
+      {/* FAQPage rich-result markup, generated from GROUPS so it can't drift
+          from the visible answers. */}
+      <JsonLd
+        data={{
+          '@context': 'https://schema.org',
+          '@type': 'FAQPage',
+          mainEntity: GROUPS.flatMap((g) =>
+            g.items.map((item) => ({
+              '@type': 'Question',
+              name: item.q,
+              acceptedAnswer: { '@type': 'Answer', text: item.a },
+            })),
+          ),
+        }}
       />
 
       <div className="mx-auto max-w-3xl">

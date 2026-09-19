@@ -1,5 +1,6 @@
 import { Lock, Database, KeyRound, Network, Eye, FileCheck } from 'lucide-react';
 import { Seo } from '@/components/Seo';
+import { legal, websiteProviders } from '@/config/legal';
 
 /* =============================================================================
    SecurityPage, the trust posture a lab needs before it connects Asilia to its
@@ -8,41 +9,12 @@ import { Seo } from '@/components/Seo';
    ============================================================================= */
 
 const PILLARS = [
-  {
-    icon: Database,
-    title: 'Your data is yours',
-    body: 'Lab content, campaigns, traces, results, and your knowledge graph, belongs to you. It is used to provide the Service to your account, never sold, and it exports with you if you leave. No lock-in.',
-  },
-  {
-    icon: Lock,
-    title: 'Encryption',
-    body: 'Data is encrypted in transit (TLS) between your browser, our APIs, and our data stores. Secrets and credentials are held by specialized processors, not in application code.',
-  },
-  {
-    icon: Network,
-    title: 'Tenant isolation',
-    body: 'Each customer’s data is isolated and access-scoped at the database layer with row-level security, so one tenant can never read another’s campaigns or graph.',
-  },
-  {
-    icon: KeyRound,
-    title: 'Authentication & access',
-    body: 'Accounts are protected by modern auth with hardened password and session handling. SSO / SAML and role-based access are available for larger deployments.',
-  },
-  {
-    icon: Eye,
-    title: 'Privacy-preserving learning',
-    body: 'Cross-lab learning is opt-in. Where enabled, it uses aggregated or differentially private signals, one lab’s failure mode can warn another’s scientist without either seeing the other’s targets.',
-  },
-  {
-    icon: FileCheck,
-    title: 'Auditability',
-    body: 'Every campaign keeps a full execution trace and lineage. Larger deployments add an audit log of access and administrative actions for governance and review.',
-  },
-];
-
-const PROCESSORS = [
-  ['Supabase', 'Database, authentication, and edge functions'],
-  ['Cloudflare', 'Bot mitigation (Turnstile) and edge delivery'],
+  { icon: Database, title: 'Limited website data', body: 'The website handles inquiries, update subscriptions, and invited account records. Please agree data handling with us before connecting research data or instruments.' },
+  { icon: Lock, title: 'Transport and credentials', body: 'Production connections use HTTPS. Account authentication is handled by Supabase; privileged database and email credentials belong in server-side configuration.' },
+  { icon: Network, title: 'Database access controls', body: 'The website database defines row-level access policies for account-owned records. Public contact and newsletter writes pass through server-side functions. These controls do not establish isolation for a separate lab deployment.' },
+  { icon: KeyRound, title: 'Account access', body: 'The website uses email and password authentication and distinguishes administrators from account holders. SSO and SAML are not offered by this website.' },
+  { icon: Eye, title: 'Research data', body: 'Cross-lab learning and differential privacy are not features of this website. Any pilot needs its own review of data access, storage, model use, and deletion before research data is shared.' },
+  { icon: FileCheck, title: 'Review before a pilot', body: 'Tell us the controls your lab requires. Deployment architecture, audit records, export procedures, and incident responsibilities need to be confirmed for the specific engagement.' },
 ];
 
 export function SecurityPage() {
@@ -50,7 +22,7 @@ export function SecurityPage() {
     <div className="px-[5vw] pb-28 pt-32 lg:px-8 lg:pt-40">
       <Seo
         title="Security & Trust, Contineon"
-        description="How Contineon protects your lab data: encryption, tenant isolation, access controls, privacy-preserving learning, and auditability."
+        description="Current website security controls, service providers, and the review needed before an Asilia pilot."
         path="/security"
       />
 
@@ -58,11 +30,11 @@ export function SecurityPage() {
         <div className="border-b border-line pb-8">
           <p className="lab-label text-safety">SECURITY &amp; TRUST</p>
           <h1 className="mt-4 font-display text-[clamp(34px,5vw,56px)] font-bold tracking-tight text-ink">
-            Built to be trusted with your lab.
+            Security, with clear boundaries.
           </h1>
           <p className="mt-4 max-w-2xl text-lg text-ink-muted">
-            Asilia connects to the instruments and data that run your science. Here is how we protect
-            them, and an honest account of where we are today.
+            Contineon is a project in development. Here is what this website implements and what
+            needs to be reviewed before any laboratory deployment.
           </p>
         </div>
 
@@ -81,13 +53,13 @@ export function SecurityPage() {
 
         {/* subprocessors */}
         <div className="mt-14">
-          <h2 className="font-display text-2xl font-bold tracking-tight text-ink">Subprocessors</h2>
+          <h2 className="font-display text-2xl font-bold tracking-tight text-ink">Website service providers</h2>
           <p className="mt-2 max-w-2xl text-ink-muted">
-            We rely on a small set of vetted providers to operate the Service. Each processes data only
-            to deliver their service to us, under contract.
+            These providers support the website where their corresponding features are enabled.
+            Pilot-specific providers and processing arrangements must be confirmed separately.
           </p>
           <div className="mt-6 overflow-hidden rounded-xl border border-line bg-surface">
-            {PROCESSORS.map(([name, role], i) => (
+            {websiteProviders.map(({ name, role }, i) => (
               <div
                 key={name}
                 className={`flex flex-wrap items-center justify-between gap-2 px-6 py-4 ${i ? 'border-t border-line' : ''}`}
@@ -103,16 +75,16 @@ export function SecurityPage() {
         <div className="mt-14 rounded-xl border border-line bg-panel p-7">
           <h2 className="font-display text-2xl font-bold tracking-tight text-ink">Where we are today</h2>
           <p className="mt-3 max-w-2xl leading-relaxed text-ink-muted">
-            Contineon is in private trial. The protections above are in place now. Formal attestations
-            (such as SOC 2) and a published Data Processing Addendum are on our roadmap as we move toward
-            general availability. If your evaluation needs a specific control, certification, or
-            contractual term, tell us, we would rather scope it with you than over-claim.
+            {legal.status} We do not claim SOC 2 certification, an independent security audit,
+            or a published Data Processing Addendum. This page describes the website implementation;
+            it is not an assurance that a particular lab deployment meets your requirements. Contact
+            us before sending sensitive data or connecting instruments.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
             <a href="/contact?topic=security" className="inline-flex items-center justify-center gap-2 rounded bg-ink px-5 py-2.5 text-sm font-medium text-paper transition-colors hover:opacity-90">
               Request our security details
             </a>
-            <a href="mailto:security@contineon.io" className="inline-flex items-center justify-center gap-2 rounded border border-line px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-line-hair">
+            <a href={`mailto:${legal.contactEmail}?subject=Security%20report`} className="inline-flex items-center justify-center gap-2 rounded border border-line px-5 py-2.5 text-sm font-medium text-ink transition-colors hover:border-line-hair">
               Report a vulnerability
             </a>
           </div>

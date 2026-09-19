@@ -8,6 +8,13 @@
 const on = (v: unknown) => v === 'true';
 
 export const flags = {
+  /** Mirror the server PAYMENTS_ENABLED gate; both default off. */
+  payments: on(import.meta.env.VITE_PAYMENTS_ENABLED),
+  /** Keep direct registration closed during the request-access phase.
+   * Also disable public signup in the hosted Supabase Auth settings. */
+  publicSignup: on(import.meta.env.VITE_PUBLIC_SIGNUP),
+  /** Enable only after confirmation email delivery and unsubscribe handling are verified. */
+  newsletter: on(import.meta.env.VITE_NEWSLETTER_ENABLED),
   /**
    * Show the illustrative campaign metrics (handoff alert + stat cards) on the
    * dashboard Overview. OFF by default: the ASILIA campaign backend does not
@@ -23,7 +30,7 @@ export const flags = {
    * provisioned through pilot engagements (/app/escrow), not self-serve checkout.
    * The checkout code stays wired, flip this to "true" to re-open self-serve.
    */
-  selfServeBilling: on(import.meta.env.VITE_SELF_SERVE_BILLING),
+  selfServeBilling: on(import.meta.env.VITE_PAYMENTS_ENABLED) && on(import.meta.env.VITE_SELF_SERVE_BILLING),
 } as const;
 
 export type Flags = typeof flags;

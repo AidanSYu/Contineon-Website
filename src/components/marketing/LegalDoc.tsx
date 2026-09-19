@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { legal } from '@/config/legal';
 
 /* =============================================================================
    LegalDoc, shared editorial shell for long-form legal/policy pages
@@ -57,45 +58,26 @@ export function LegalSection({ n, heading, children }: { n: string; heading: str
   );
 }
 
-/**
- * Prominent, honest banner: this content is a DRAFT generated from how the
- * product actually behaves. It is NOT legal advice and must be reviewed by
- * qualified counsel (and have placeholders filled) before launch.
- */
-export function LegalTemplateNotice() {
+/** The project's present status; this is not a claim of incorporation. */
+export function ProjectStatusNotice() {
   return (
-    <div className="rounded-lg border border-safety/50 bg-safety/[0.07] p-5">
-      <p className="font-mono-tech text-[10px] uppercase tracking-[0.16em] text-safety">
-        Draft, not legal advice, review required
-      </p>
+    <div className="rounded-lg border border-line bg-panel p-5">
+      <p className="font-semibold text-ink">A project in development</p>
       <p className="mt-2 text-sm leading-relaxed text-ink-muted">
-        This document is a <strong className="text-ink">DRAFT</strong> generated from Contineon's
-        actual product behavior. It is <strong className="text-ink">not legal advice</strong> and has
-        not been reviewed by counsel. It must be reviewed and adapted by a qualified attorney for
-        Contineon's jurisdiction(s) and data-processing arrangements before launch. Items in{' '}
-        <code className="font-mono-tech text-[12px] text-safety">[BRACKETS]</code> are placeholders the
-        owner must complete; clauses marked{' '}
-        <code className="font-mono-tech text-[12px] text-safety">[REVIEW WITH COUNSEL]</code> involve
-        legal judgment a non-lawyer should not finalize.
+        {legal.status} This website introduces our work and lets you contact the team.
+        Requesting access does not create a paid subscription or a pilot agreement.
       </p>
     </div>
   );
 }
 
-/** Inline helper to render a placeholder token consistently within prose. */
-export function Placeholder({ children }: { children: ReactNode }) {
+export function LegalContact() {
   return (
-    <code className="rounded bg-safety/10 px-1 py-0.5 font-mono-tech text-[12px] text-safety">
-      {children}
-    </code>
+    <p>
+      {legal.operatorName && <>This website is operated by {legal.operatorName}. </>}
+      Contineon is based in {legal.baseLocation}.{' '}
+      For questions or privacy requests, email{' '}
+      <a href={`mailto:${legal.contactEmail}`} className="text-safety hover:underline">{legal.contactEmail}</a>.
+    </p>
   );
-}
-
-/**
- * Render a filled-in legal fact (from src/config/legal.ts), or fall back to the
- * visible [PLACEHOLDER] marker when it hasn't been provided yet, so unfilled
- * blanks stay obvious and the "review required" banner stays accurate.
- */
-export function Fact({ value, placeholder }: { value: string | null; placeholder: string }) {
-  return value ? <>{value}</> : <Placeholder>{placeholder}</Placeholder>;
 }
